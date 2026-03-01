@@ -1,0 +1,2 @@
+- Snapshot of a table at a moment in time
+- Useful to track history of a column that overwrites itself

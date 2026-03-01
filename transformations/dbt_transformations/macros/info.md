@@ -1,0 +1,3 @@
+- Python functions, reusable logic.
+- Can be easily tested.
+- Functions for conversions (dates), numbers, etc.

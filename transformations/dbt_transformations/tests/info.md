@@ -1,0 +1,1 @@
+- Use plain sql to assert over columns and tables, for QA.

@@ -1,0 +1,3 @@
+- Upload small models to be populated.
+- Lookup tables: categories, enums, etc.
+- Quick and dirty approach, better not to use it if possible.

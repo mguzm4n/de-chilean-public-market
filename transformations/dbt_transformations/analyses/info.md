@@ -1,0 +1,1 @@
+- A place for SQL files that you don't want to expose to stakeholders. Use it for data quality reports, more than tests.
