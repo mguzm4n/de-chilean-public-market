@@ -1,9 +1,10 @@
 with source as (
-    select * from {{ source('raw_data', 'raw_orders') }}
+    select *  from {{ source('raw_data', 'raw_orders') }}
 ),
 
 renamed as (
     select
+        -- order-specific fields
         id,
         codigo,
         link,
@@ -13,30 +14,33 @@ renamed as (
         procedenciaoc as procedencia_aoc,
         estratodirecto as estrato_directo,
         escompraagil as es_compra_agil,
-        codigotipo as codigo_tipo,
+        {{ safe_cast_codigo('codigotipo') }} as codigo_tipo,
         codigoabreviadotipooc as codigo_abreviado_tipo_oc,
         descripciontipooc as descripcion_tipo_oc,
-        codigoestado as codigo_estado,
+        {{ safe_cast_codigo('codigoestado') }} as codigo_estado,
         estado,
-        codigoestadoproveedor as codigo_estado_proveedor,
+        {{ safe_cast_codigo('codigoestadoproveedor') }} as codigo_estado_proveedor,
         estadoproveedor as estado_proveedor, -- renamed
-        fechacreacion as fecha_creacion, -- renamed
-        fechaenvio as fecha_envio, -- renamed
-        fechasolicitudcancelacion as fecha_solicitud_cancelacion, -- renamed
-        fechaultimamodificacion as fecha_ultima_modificacion, -- renamed
-        fechaaceptacion as fecha_aceptacion, -- renamed
-        fechacancelacion as fecha_cancelacion, -- renamed
-        tieneitems as tiene_items, -- renamed
+
+        -- dates
+        {{ safe_cast_fecha('fechacreacion') }} as fecha_creacion, -- renamed
+        {{ safe_cast_fecha('fechaenvio') }} as fecha_envio, -- renamed
+        {{ safe_cast_fecha('fechasolicitudcancelacion') }} as fecha_solicitud_cancelacion, -- renamed
+        {{ safe_cast_fecha('fechaultimamodificacion') }} as fecha_ultima_modificacion, -- renamed
+        {{ safe_cast_fecha('fechaaceptacion') }} as fecha_aceptacion, -- renamed
+        {{ safe_cast_fecha('fechacancelacion') }} as fecha_cancelacion, -- renamed
+
+        {{ safe_cast_bool('tieneitems') }} as tiene_items, -- renamed
         promediocalificacion as promedio_calificacion, -- renamed
         cantidadevaluacion as cantidad_evaluacion, -- renamed
-        montototaloc as monto_total_oc, -- renamed
+        {{ error_cast_money('montototaloc') }} as monto_total_oc, -- renamed, totalnetooc + IVA
         tipomonedaoc as tipo_moneda_oc, -- renamed
-        montototaloc_pesoschilenos as monto_total_oc_pesos_chilenos, -- renamed
-        impuestos,
+        {{ error_cast_money('montototaloc_pesoschilenos') }} as monto_total_oc_pesos_chilenos, -- renamed, totalnetooc + IVA
+        {{ error_cast_money('impuestos') }}, -- totalnetooc*IVA
         tipoimpuesto as tipo_impuesto, -- renamed
         descuentos,
         cargos,
-        totalnetooc as total_neto_oc, -- renamed
+        {{ error_cast_money('totalnetooc') }} as total_neto_oc, -- renamed, original NO IVA
         codigounidadcompra as codigo_unidad_compra, -- renamed
         rutunidadcompra as rut_unidad_compra, -- renamed
         unidadcompra as unidad_compra, -- renamed
@@ -56,13 +60,15 @@ renamed as (
         comunaproveedor as comuna_proveedor, -- renamed
         regionproveedor as region_proveedor, -- renamed
         paisproveedor as pais_proveedor, -- renamed
-        financiamiento,
-        porcentajeiva as porcentaje_iva, -- renamed
+        {{ null_if_empty_str('financiamiento') }},
+        {{ error_cast_money('porcentajeiva') }} as porcentaje_iva, -- renamed
         pais,
-        tipodespacho as tipo_despacho, -- renamed
-        formapago as forma_pago, -- renamed
-        codigolicitacion as codigo_licitacion, -- renamed
+        {{ safe_cast_codigo('tipodespacho') }} as tipo_despacho, -- renamed
+        {{ safe_cast_codigo('formapago') }} as forma_pago, -- renamed
+        {{ null_if_empty_str('codigolicitacion') }} as codigo_licitacion, -- renamed
         codigo_conveniomarco as codigo_convenio_marco, -- renamed
+
+        -- product specific types
         iditem as id_item, -- renamed
         codigocategoria as codigo_categoria, -- renamed
         categoria,
@@ -76,12 +82,12 @@ renamed as (
         cantidad,
         unidadmedida as unidad_medida, -- renamed
         monedaitem as moneda_item, -- renamed
-        precioneto as precio_neto, -- renamed
+        {{ error_cast_money('precioneto') }} as precio_neto, -- renamed
         totalcargos as total_cargos, -- renamed
         totaldescuentos as total_descuentos, -- renamed
-        totalimpuestos as total_impuestos, -- renamed
-        totallineaneto as total_linea_neto, -- renamed
-        forma_de_pago -- ambiguous: can be duplicate/overlap
+        {{ error_cast_money('totalimpuestos') }} as total_impuestos, -- renamed
+        {{ error_cast_money('totallineaneto') }} as total_linea_neto, -- renamed
+        forma_de_pago -- forma de pago specific to this product instead of order
     from source
 )
 

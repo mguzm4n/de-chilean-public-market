@@ -1,0 +1,15 @@
+codigo,abreviacion,descripcion
+1,OC,Automatica
+2,D1,Trato directo que genera Orden de Compra por proveedor único
+3,C1,"Trato directo que genera Orden de Compra por emergencia, urgencia e imprevisto"
+4,F3,Trato directo que genera Orden de Compra por confidencialidad
+5,G1,Trato directo que genera Orden de Compra por naturaleza de negociación
+6,R1,Orden de compra menor a 3UTM
+7,CA,Orden de compra sin resolución.
+8,SE,Sin emisión automática
+9,CM,Convenio Marco
+10,FG,Trato Directo (Art. 8 letras f y g - Ley 19.886)
+11,TL,Convenio Marco – Tienda de Libros (Obsoleto)
+12,MC,Microcompra
+13,AG,Compra Ágil
+14,CC,Compra Coordinada

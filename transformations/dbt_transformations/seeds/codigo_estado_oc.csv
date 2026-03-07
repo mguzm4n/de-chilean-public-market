@@ -1,0 +1,9 @@
+codigo,descripcion
+4,Enviada a Proveedor
+5,En proceso
+6,Aceptada
+9,Cancelada
+12,Recepción Conforme
+13,Pendiente de Recepcionar
+14,Recepcionada Parcialmente
+15,Recepcion Conforme Incompleta
