@@ -1,0 +1,28 @@
+[2026-02-28T16:49:19.009+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-02-28T16:49:19.042+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: historical_ingest_for_month.fetch_and_upload_to_gcs backfill__2025-10-01T00:00:00+00:00 [queued]>
+[2026-02-28T16:49:19.053+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: historical_ingest_for_month.fetch_and_upload_to_gcs backfill__2025-10-01T00:00:00+00:00 [queued]>
+[2026-02-28T16:49:19.054+0000] {taskinstance.py:2866} INFO - Starting attempt 3 of 2
+[2026-02-28T16:49:19.081+0000] {taskinstance.py:2889} INFO - Executing <Task(PythonOperator): fetch_and_upload_to_gcs> on 2025-10-01 00:00:00+00:00
+[2026-02-28T16:49:19.092+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=5526) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-02-28T16:49:19.094+0000] {standard_task_runner.py:72} INFO - Started process 5527 to run task
+[2026-02-28T16:49:19.092+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'historical_ingest_for_month', 'fetch_and_upload_to_gcs', 'backfill__2025-10-01T00:00:00+00:00', '--job-id', '75', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/ingest_for_month.py', '--cfg-path', '/tmp/tmpuwg1tme1']
+[2026-02-28T16:49:19.098+0000] {standard_task_runner.py:105} INFO - Job 75: Subtask fetch_and_upload_to_gcs
+[2026-02-28T16:49:19.123+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:209 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2026-02-28T16:49:19.182+0000] {task_command.py:467} INFO - Running <TaskInstance: historical_ingest_for_month.fetch_and_upload_to_gcs backfill__2025-10-01T00:00:00+00:00 [running]> on host 49b68930484c
+[2026-02-28T16:49:19.184+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:470 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2026-02-28T16:49:19.335+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='historical_ingest_for_month' AIRFLOW_CTX_TASK_ID='fetch_and_upload_to_gcs' AIRFLOW_CTX_EXECUTION_DATE='2025-10-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='3' AIRFLOW_CTX_DAG_RUN_ID='backfill__2025-10-01T00:00:00+00:00'
+[2026-02-28T16:49:19.339+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-02-28T16:49:19.370+0000] {logging_mixin.py:190} INFO - month: 10
+[2026-02-28T16:49:19.371+0000] {logging_mixin.py:190} INFO - year: 2025
+[2026-02-28T16:49:19.372+0000] {logging_mixin.py:190} INFO - Fetching data from https://transparenciachc.blob.core.windows.net/oc-da/2025-10.zip...
+[2026-02-28T16:49:20.060+0000] {logging_mixin.py:190} INFO - Buffering ZIP to temp file...
+[2026-02-28T16:49:26.941+0000] {logging_mixin.py:190} INFO - Extracting CSV from ZIP...
+[2026-02-28T16:49:26.943+0000] {logging_mixin.py:190} INFO - Converting encoding and buffering to a temporary CSV file...
+[2026-02-28T16:49:34.539+0000] {logging_mixin.py:190} INFO - Uploading converted CSV to GCS...
+[2026-02-28T16:49:57.959+0000] {logging_mixin.py:190} INFO - Uploaded https://transparenciachc.blob.core.windows.net/oc-da/2025-10.zip -> gs://sublime-seat-484418-h6-***_datazoomcap_project_bucket/historical/year=2025/month=10/data.csv
+[2026-02-28T16:49:57.961+0000] {python.py:240} INFO - Done. Returned value was: None
+[2026-02-28T16:49:57.971+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-02-28T16:49:57.972+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=historical_ingest_for_month, task_id=fetch_and_upload_to_gcs, run_id=backfill__2025-10-01T00:00:00+00:00, execution_date=20251001T000000, start_date=20260228T164919, end_date=20260228T164957
+[2026-02-28T16:49:57.999+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-02-28T16:49:58.014+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-02-28T16:49:58.017+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
