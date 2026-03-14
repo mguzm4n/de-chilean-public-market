@@ -33,14 +33,14 @@ renamed as (
         {{ safe_cast_bool('tieneitems') }} as tiene_items, -- renamed
         promediocalificacion as promedio_calificacion, -- renamed
         cantidadevaluacion as cantidad_evaluacion, -- renamed
-        {{ error_cast_money('montototaloc') }} as monto_total_oc, -- renamed, totalnetooc + IVA
+        {{ error_cast_money('montototaloc') }} as monto_total_oc, -- renamed, total neto + impuesto en moneda original
         tipomonedaoc as tipo_moneda_oc, -- renamed
-        {{ error_cast_money('montototaloc_pesoschilenos') }} as monto_total_oc_pesos_chilenos, -- renamed, totalnetooc + IVA
-        {{ error_cast_money('impuestos') }}, -- totalnetooc*IVA
+        {{ error_cast_money('montototaloc_pesoschilenos') }} as monto_total_oc_pesos_chilenos, -- renamed, total neto + impuesto en CLP
+        {{ error_cast_money('impuestos') }} as impuesto, -- monto del impuesto = pctg * (total neto)
         tipoimpuesto as tipo_impuesto, -- renamed
         descuentos,
         cargos,
-        {{ error_cast_money('totalnetooc') }} as total_neto_oc, -- renamed, original NO IVA
+        {{ error_cast_money('totalnetooc') }} as total_neto_oc, -- renamed, monto neto sin impuesto
         codigounidadcompra as codigo_unidad_compra, -- renamed
         rutunidadcompra as rut_unidad_compra, -- renamed
         unidadcompra as unidad_compra, -- renamed
@@ -60,7 +60,7 @@ renamed as (
         comunaproveedor as comuna_proveedor, -- renamed
         regionproveedor as region_proveedor, -- renamed
         paisproveedor as pais_proveedor, -- renamed
-        {{ null_if_empty_str('financiamiento') }},
+        {{ null_if_empty_str('financiamiento') }} as financiamiento,
         {{ error_cast_money('porcentajeiva') }} as porcentaje_iva, -- renamed
         pais,
         {{ safe_cast_codigo('tipodespacho') }} as tipo_despacho, -- renamed
@@ -79,7 +79,7 @@ renamed as (
         rubron3 as rubro_n3, -- renamed
         especificacioncomprador as especificacion_comprador, -- renamed
         especificacionproveedor as especificacion_proveedor, -- renamed
-        cantidad,
+        cantidad as item_cantidad,
         unidadmedida as unidad_medida, -- renamed
         monedaitem as moneda_item, -- renamed
         {{ error_cast_money('precioneto') }} as precio_neto, -- renamed
