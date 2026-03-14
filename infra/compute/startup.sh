@@ -1,5 +1,4 @@
 #!/bin/bash
-# 1. Update system and install Docker
 apt-get update
 apt-get install -y ca-certificates curl gnupg git
 install -m 0755 -d /etc/apt/keyrings
@@ -17,4 +16,7 @@ cd /opt
 git clone https://github.com/mguzm4n/de-chilean-public-market
 cd de-chilean-public-market/ingest/airflow
 
-docker compose up -d
+gcloud storage cp gs://${BUCKET_NAME}/config/ingest/airflow/.env .env
+echo -e "\nAIRFLOW_UID=$(id -u)" >> .env
+
+docker compose up -d > /var/log/my-docker-compose.log 2>&1

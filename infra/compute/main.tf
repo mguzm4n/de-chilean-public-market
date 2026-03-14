@@ -39,10 +39,16 @@ resource "google_project_iam_member" "sa_storage_admin" {
   member  = "serviceAccount:${google_service_account.airflow_vm_sa.email}"
 }
 
+resource "google_storage_bucket_object" "env_file" {
+  name   = "config/ingest/airflow/.env"
+  source = "${path.module}/../../ingest/airflow/.env"
+  bucket = data.google_storage_bucket.data_lake.name
+}
+
 resource "google_compute_instance" "airflow_server" {
   name         = "airflow-server-vm"
-  machine_type = "e2-medium" # recommended for Airflow/Docker
-  zone         = "us-central1-a"
+  machine_type = "e2-standard-2" # upgraded from e2-medium
+  zone         = var.zone
 
   boot_disk {
     initialize_params {
@@ -64,5 +70,9 @@ resource "google_compute_instance" "airflow_server" {
     scopes = ["cloud-platform"]
   }
 
-  metadata_startup_script = file("${path.module}/startup.sh")
+  metadata_startup_script = templatefile("${path.module}/startup.sh", {
+    BUCKET_NAME = data.google_storage_bucket.data_lake.name
+  })
+
+  depends_on = [google_storage_bucket_object.env_file]
 }
