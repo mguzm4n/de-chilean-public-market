@@ -43,9 +43,36 @@ Powershell:
 ```
 gcloud compute ssh airflow-server-vm --zone=<zone> --project=<project_id> --ssh-flag="-L 8080:localhost:8080"
 ```
+## Managing the VM
+
+Using the GCP CLI:
+
+1. Shut down: `gcloud compute instances stop airflow-server-vm --zone=<zone>`
+2. Boot up: `gcloud compute instances start airflow-server-vm --zone=<zone>`
 
 # Ingest of data
 
-# Transformations
+The ingesting pipeline is only for historical data, that is, the data will be uploaded in batches, in a monthly schedule. In order to fill the data, ssh into the VM as we did in earlier steps, and run:
+
+```
+docker compose exec -e AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG=4 airflow-scheduler airflow dags backfill -s 2024-02-01 -e 2024-12-01 historical_ingest_gcs_to_bq_for_month 
+```
+
+You can choose any range of dates. The DAG will first fetch the data from the official API and store it, raw, in GCS Buckets. Then, it will move the data from the buckets and land them, as one big table, inside bigquery- still raw data but merged for all months.
 
 # Modelling
+
+# Transformations
+
+Since I'm using dbt, you should install it locally and setup the connections with BigQuery/GCP. 
+
+## Managing dbt
+
+1. `dbt run --select <model>`: Run a single model. 
+2. `dbt run`: Run all models.
+3. `dbt build`: Run models, tests, seeds, etc.
+4. `dbt build --select <prefix><model><suffix>`: 
+    - Upstream: Use "+" as a prefix to build every model <model> depends on, back to the source.
+    - Downstream: Use "+" as a suffix to build downstream dependencies.
+
+# Dashboard 
