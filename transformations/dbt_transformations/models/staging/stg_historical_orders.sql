@@ -1,9 +1,12 @@
 with source as (
-    select *  from {{ source('raw_data', 'raw_orders') }}
+    select _PARTITIONTIME, *  from {{ source('raw_data', 'raw_orders') }}
 ),
 
 renamed as (
     select
+        -- use BQ pseudo-column
+        DATE(_PARTITIONTIME) as ingestion_date,
+        
         -- order-specific fields
         id,
         codigo,

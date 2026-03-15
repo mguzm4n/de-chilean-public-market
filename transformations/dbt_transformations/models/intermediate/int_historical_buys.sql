@@ -5,21 +5,25 @@ with src as (
 )
 
 select 
+  ingestion_date,
+  
   id_item as item_id,
   codigo as order_id,
+
+  fecha_creacion,
   
   nombre_producto_generico,
   codigo_producto_onu,
 
   categoria,
-  codigo_categoria
+  codigo_categoria,
 
   rubro_n1,
   rubro_n2,
   rubro_n3,
 
   especificacion_comprador,
-  especificacion_proveedor
+  especificacion_proveedor,
 
   item_cantidad as cantidad,
   unidad_medida,
@@ -32,5 +36,5 @@ select
   total_cargos,
   total_descuentos,
 
-  forma_de_pago,
+  forma_de_pago
 from src

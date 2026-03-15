@@ -21,6 +21,8 @@ dedup as (
 )
 
 select
+  ingestion_date,
+  
   id as row_id,
   codigo as order_id,
   
