@@ -26,7 +26,6 @@ fi
 
 cd /opt
 
-# Handle Git safely
 if [ ! -d "de-chilean-public-market" ]; then
     echo "Repository not found. Cloning..."
     git clone https://github.com/mguzm4n/de-chilean-public-market
@@ -43,6 +42,12 @@ cd /opt/de-chilean-public-market/ingest/airflow
 
 
 gcloud storage cp gs://${BUCKET_NAME}/config/ingest/airflow/.env .env
+cat <<EOF >> .env
+GCP_PROJECT_ID="${GCP_PROJECT_ID}"
+GCP_GCS_BUCKET="${BUCKET_NAME}"
+GCP_BQ_LOCATION="${GCP_BQ_LOCATION}"
+GCP_BQ_DATASET="${GCP_BQ_DATASET}"
+EOF
 
 if ! grep -q "^AIRFLOW_UID=" .env; then
     echo -e "\nAIRFLOW_UID=$(id -u)" >> .env

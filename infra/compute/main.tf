@@ -71,7 +71,10 @@ resource "google_compute_instance" "airflow_server" {
   }
 
   metadata_startup_script = templatefile("${path.module}/startup.sh", {
-    BUCKET_NAME = data.google_storage_bucket.data_lake.name
+    GCP_PROJECT_ID = var.project_id,
+    BUCKET_NAME = data.google_storage_bucket.data_lake.name,
+    GCP_BQ_LOCATION = var.data_location,
+    GCP_BQ_DATASET = var.bq_dataset_id
   })
 
   depends_on = [google_storage_bucket_object.env_file]
