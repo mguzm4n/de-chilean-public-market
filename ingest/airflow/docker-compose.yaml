@@ -61,8 +61,8 @@ x-airflow-common:
     GCP_PROJECT_ID: ${GCP_PROJECT_ID}
     GCP_GCS_BUCKET: ${GCP_GCS_BUCKET}
     #dbt
-    GCP_BQ_LOCATION=${GCP_BQ_LOCATION}
-    GC_BQ_DATASET=${GC_BQ_DATASET}
+    GCP_BQ_LOCATION: ${GCP_BQ_LOCATION}
+    GC_BQ_DATASET: ${GC_BQ_DATASET}
     DBT_PROFILES_DIR: /opt/airflow/dbt_project
 
   volumes:
