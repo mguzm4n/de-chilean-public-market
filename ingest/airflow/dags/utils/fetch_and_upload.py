@@ -14,8 +14,7 @@ import tempfile
 from google.cloud import storage
 
 def fetch_and_upload(year: str, month: str, gcs_prefix: str, bucket_name: str, **context):
-    print("month:", month)
-    print("year:", year)
+    print("month:", month, "\t year:", year)
     
     month_formatted = month.lstrip("0")
     url = f"https://transparenciachc.blob.core.windows.net/oc-da/{year}-{month_formatted}.zip"

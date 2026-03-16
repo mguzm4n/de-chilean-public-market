@@ -19,14 +19,14 @@ with DAG(
         "gcs_prefix": DEFAULT_GCS_PREFIX,
         "project_id": None,
         "bucket_name": None,
-        "dataset_id": "chilean_public_market",
+        "dataset_id": None,
     },
     user_defined_macros={
         "get_config": resolve_bucket_config,
     }
 ) as dag:
     
-    bucket_name_resolved = "{{ get_config('sublime-seat-484418-h6', 'airflow_datazoomcap_project_bucket', params)['bucket_name'] }}"
+    bucket_name_resolved = "{{ get_config(params)['bucket_name'] }}"
 
     task_fetch_data = PythonOperator(
         task_id="fetch_and_upload_to_gcs",
@@ -50,8 +50,8 @@ with DAG(
             "{{ params.gcs_prefix }}/year={{ logical_date.year }}/month={{ logical_date.strftime('%m') }}/data.csv"
         ], 
         destination_project_dataset_table=(
-            "{{ get_config('sublime-seat-484418-h6', 'airflow_datazoomcap_project_bucket', params)['project_id'] }}"
-            ".{{ params.dataset_id }}.raw_orders${{ logical_date.strftime('%Y%m') }}"
+            "{{ get_config(params)['project_id'] }}"
+            ".{{ get_config(params)['dataset_id'] }}.raw_orders${{ logical_date.strftime('%Y%m') }}"
         ),
 
         write_disposition='WRITE_TRUNCATE', 

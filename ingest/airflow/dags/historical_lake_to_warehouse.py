@@ -4,10 +4,6 @@ from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQue
 
 from utils.resolvers import resolve_bucket_config
 
-# "sublime-seat-484418-h6"
-# "airflow_datazoomcap_project_bucket"
-
-
 with DAG(
     dag_id="historical_gcs_to_bq",
     start_date=datetime(2020, 1, 1),
