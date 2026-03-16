@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: raw_data
     description: "raw source for orders data"
-    database: sublime-seat-484418-h6 # bq - project id
-    schema: chilean_public_market # bq - dataset name
+    database: "{{ env_var('GCP_PROJECT_ID', '') }}" # bq - project id
+    schema: "{{ env_var('GCP_BQ_DATASET', 'chilean_public_market') }}" # bq - dataset name
     tables:
       - name: raw_orders
