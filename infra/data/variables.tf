@@ -9,10 +9,9 @@ variable "region" {
   default     = "southamerica-west1"
 }
 
-variable "zone" {
-  description = "The default compute zone"
+variable "gcs_bucket_name" {
+  description = "The name of the BigQuery dataset"
   type        = string
-  default     = "southamerica-west1-a"
 }
 
 variable "data_location" {
@@ -20,13 +19,6 @@ variable "data_location" {
   type        = string
   default     = "southamerica-west1"
 }
-
-
-variable "gcs_bucket_name" {
-  description = "The name of the BigQuery dataset"
-  type        = string
-}
-
 
 variable "bq_dataset_id" {
   description = "The name of the BigQuery dataset"

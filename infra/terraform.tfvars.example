@@ -1,0 +1,7 @@
+project_id      = "GCP_PROJECT_ID"
+region          = "southamerica-west1" # change to your closest location
+zone            = "southamerica-west1-a" # change to your closest location
+data_location   = "southamerica-west1" # change to your closest location
+
+bq_dataset_id   = "chilean_public_market"
+gcs_bucket_name = "UNIQUE_BUCKET_NAME"
