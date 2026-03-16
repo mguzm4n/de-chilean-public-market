@@ -12,6 +12,11 @@ Since we will use the ELT strategy, we need a place to load all of our data. We 
 
 The transformations of our data will occur inside of our data warehouse. BigQuery, from GCP, is a widely used columnar database. That is, it doesn't store data at a row level with all its columns, like a traditional SQL database, but groups the columns instead. So, querying specific columns is really fsat. And you should never do a SELECT *.
 
+# Setup of Environment Variables 
+
+1. Head to the `infra/` folder. You can see the `terraform.tfvars.example` file. Fill each field with your desired configurations and remove the `.example` suffix. 
+2. Inside `ingest/airflow/` you will find an `.env_example` file. Again remove the suffix `_example` and fill the fields with the updated configs in step 1 plus the aditional modifications you need.
+
 # Infrastructure
 
 The core infrastructure is set up with terraform files. We will need a bucket for the lake and a bigquery dataset created for the warehouse. More importantly, we will need to spin up a server (VM) to hold our Airflow UI. This VM will be the compute resource that will run our DAGs.
@@ -19,6 +24,8 @@ The core infrastructure is set up with terraform files. We will need a bucket fo
 In order to start the project, you should locate the `compute` and `data` folders under the `infra` directory. 
 1. `data`: This terraform script will provide the data sources infrastructure needed to run our projects. Run this script first.
 2. `compute`: This terraform script will create a service account, create a VM to run Airflow, and land safely the environment variables into the VM.
+
+> Remember to use `terraform <init | plan | apply | destroy > -var-file="../terraform.tfvars"` in order to use your defined environment variables.
 
 ## Checking the VM
 
@@ -43,6 +50,7 @@ Powershell:
 ```
 gcloud compute ssh airflow-server-vm --zone=<zone> --project=<project_id> --ssh-flag="-L 8080:localhost:8080"
 ```
+
 ## Managing the VM
 
 Using the GCP CLI:
@@ -60,11 +68,21 @@ docker compose exec -e AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG=4 airflow-schedule
 
 You can choose any range of dates. The DAG will first fetch the data from the official API and store it, raw, in GCS Buckets. Then, it will move the data from the buckets and land them, as one big table, inside bigquery- still raw data but merged for all months.
 
-# Modelling
-
 # Transformations
 
 Since I'm using dbt, you should install it locally and setup the connections with BigQuery/GCP. 
+
+# Modelling
+
+- Inside the `transformations/dbt_transformations/models/` directory you will find different stages where different tables live.
+0. `raw_orders`: This is the first table inside BigQuery where our monthly data lands. It is partitioned by the ingestion date -logical date-.
+1. `staging`: In the  step, we take the raw source table (all strings) and cast to appropiate column types, such as numeric, date, or resolve to a string or explicit null values. 
+2. `intermediate`: Here we split the `stg` with "correct" and renamed columns into `buys` and `orders`. The `int_historical_orders` view contains a unique list of all the orders throughout the years and months, while the `int_historical_buys` will hold the items that belong to an order, new renames are made to clarify the intent of the ambiguous old fields.
+3. `marts`
+    - The consumable data. Materialized as incremental, they will only be updated with the most recent data instead of built from zero. Here, the chose as the fact table the buys, since they represent a transaction at a granular level.
+    - This tables are partitioned by the `fecha_creacion` field instead of the `ingestion_date` as the source table -where we need a stable date-.
+    - The `fct_buys` table is correctly partitioned by `order_id` since multiple items belong to one specific order so it's the logical clustering field.
+
 
 ## Managing dbt
 
