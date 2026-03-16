@@ -53,4 +53,4 @@ if ! grep -q "^AIRFLOW_UID=" .env; then
     echo -e "\nAIRFLOW_UID=$(id -u)" >> .env
 fi
 
-docker compose up -d > /var/log/my-docker-compose.log 2>&1
+docker compose up -d --build > /var/log/my-docker-compose.log 2>&1

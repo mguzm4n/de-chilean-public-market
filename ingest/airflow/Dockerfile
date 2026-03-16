@@ -38,4 +38,11 @@ RUN chmod +x scripts/*
 USER $AIRFLOW_UID
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+ARG AIRFLOW_VERSION=2.10.3
+ARG PYTHON_VERSION=3.12
+ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+
+
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r requirements.txt --constraint "${CONSTRAINT_URL}"
