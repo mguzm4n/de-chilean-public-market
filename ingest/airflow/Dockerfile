@@ -46,3 +46,6 @@ ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints
 
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r requirements.txt --constraint "${CONSTRAINT_URL}"
+
+RUN python -m venv /opt/airflow/dbt_venv && \
+/opt/airflow/dbt_venv/bin/pip install --no-cache-dir dbt-bigquery

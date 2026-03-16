@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
 from datetime import datetime
 
@@ -67,4 +68,14 @@ with DAG(
         autodetect=False,
     )
     
-    task_fetch_data >> load_historical_data_to_bq
+    dbt_build_models = BashOperator(
+        task_id="dbt_build_models",
+        bash_command=(
+            "/opt/airflow/dbt_venv/bin/dbt build "
+            "--project-dir /opt/airflow/dbt_project "
+            "--profiles-dir /opt/airflow/dbt_project "
+            "--vars '{\"logical_date\": \"{{ logical_date.strftime(\"%Y-%m-%d\") }}\", \"year\": \"{{ logical_date.year }}\", \"month\": \"{{ logical_date.month }}\"}' "
+        )
+    )
+    
+    task_fetch_data >> load_historical_data_to_bq >> dbt_build_models
