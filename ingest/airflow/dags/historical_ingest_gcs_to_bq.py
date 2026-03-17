@@ -74,7 +74,10 @@ with DAG(
             "/opt/airflow/dbt_venv/bin/dbt build "
             "--project-dir /opt/airflow/dbt_project "
             "--profiles-dir /opt/airflow/dbt_project "
+            "--target-path /tmp/dbt/target "
+            "--log-path /tmp/dbt/logs "
             "--vars '{\"logical_date\": \"{{ logical_date.strftime(\"%Y-%m-%d\") }}\", \"year\": \"{{ logical_date.year }}\", \"month\": \"{{ logical_date.month }}\"}' "
+            "2>&1"
         )
     )
     
