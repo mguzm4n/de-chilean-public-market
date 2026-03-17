@@ -32,7 +32,6 @@ if [ ! -d "de-chilean-public-market" ]; then
 else
     echo "Repository found. Pulling latest changes..."
     cd de-chilean-public-market
-    # Stash any local accidental changes, then pull
     git stash
     git pull
     cd ..
@@ -41,7 +40,18 @@ fi
 cd /opt/de-chilean-public-market/ingest/airflow
 
 
-gcloud storage cp gs://${BUCKET_NAME}/config/ingest/airflow/.env .env
+MAX_RETRIES=10
+RETRY_COUNT=0
+until gcloud storage cp "gs://${BUCKET_NAME}/config/ingest/airflow/.env" .env; do
+    RETRY_COUNT=$((RETRY_COUNT+1))
+    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+        echo "Failed to copy .env file after $MAX_RETRIES attempts."
+        exit 1
+    fi
+    echo "Copy failed. Waiting 15 seconds. (Attempt $RETRY_COUNT/$MAX_RETRIES)"
+    sleep 15
+done
+
 cat <<EOF >> .env
 GCP_PROJECT_ID="${GCP_PROJECT_ID}"
 GCP_GCS_BUCKET="${BUCKET_NAME}"

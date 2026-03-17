@@ -33,6 +33,12 @@ resource "google_project_iam_member" "sa_bigquery_editor" {
   member  = "serviceAccount:${google_service_account.airflow_vm_sa.email}"
 }
 
+resource "google_project_iam_member" "sa_bigquery_job_user" {
+  project = var.project_id
+  role    = "roles/bigquery.jobUser"
+  member  = "serviceAccount:${google_service_account.airflow_vm_sa.email}"
+}
+
 resource "google_project_iam_member" "sa_storage_admin" {
   project = var.project_id
   role    = "roles/storage.objectAdmin"
