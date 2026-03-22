@@ -1,2 +1,4 @@
 .venv/
 logs/
+*.ps1
+**/.user.yml

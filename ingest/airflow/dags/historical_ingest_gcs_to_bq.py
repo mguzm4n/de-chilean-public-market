@@ -52,7 +52,7 @@ with DAG(
         ], 
         destination_project_dataset_table=(
             "{{ get_config(params)['project_id'] }}"
-            ".{{ get_config(params)['dataset_id'] }}.raw_orders${{ logical_date.strftime('%Y%m') }}"
+            ".{{ get_config(params)['dataset_id'] }}_raw.raw_orders${{ logical_date.strftime('%Y%m') }}"
         ),
 
         write_disposition='WRITE_TRUNCATE', 
@@ -75,6 +75,7 @@ with DAG(
             "--project-dir /opt/airflow/dbt_project "
             "--profiles-dir /opt/airflow/dbt_project "
             "--target-path /tmp/dbt/target "
+            "--target prod "
             "--log-path /tmp/dbt/logs "
             "--vars '{\"logical_date\": \"{{ logical_date.strftime(\"%Y-%m-%d\") }}\", \"year\": \"{{ logical_date.year }}\", \"month\": \"{{ logical_date.month }}\"}' "
             "2>&1"

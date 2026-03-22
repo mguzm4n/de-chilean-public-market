@@ -1,10 +1,17 @@
 dbt_transformations:
-  target: prod
+  target: "{{ env_var('DBT_TARGET', 'dev') }}"
   outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: "{{ env_var('GCP_BQ_DATASET') }}_dev"
+      threads: 2
+      location: "{{ env_var('GCP_BQ_LOCATION') }}"
     prod:
       type: bigquery
       method: oauth
       project: "{{ env_var('GCP_PROJECT_ID') }}"
-      dataset: "{{ env_var('GCP_BQ_DATASET') }}"
+      dataset: "{{ env_var('GCP_BQ_DATASET') }}_prd"
       threads: 4
       location: "{{ env_var('GCP_BQ_LOCATION') }}"

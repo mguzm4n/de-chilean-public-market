@@ -17,11 +17,6 @@ data "google_storage_bucket" "data_lake" {
   name = var.gcs_bucket_name
 }
 
-data "google_bigquery_dataset" "data_warehouse" {
-  project = var.project_id
-  dataset_id = var.bq_dataset_id
-}
-
 resource "google_service_account" "airflow_vm_sa" {
   account_id   = "airflow-runtime-sa"
   display_name = "Airflow VM Runtime Service Account"
